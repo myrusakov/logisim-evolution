@@ -177,6 +177,18 @@ public abstract class AbstractTtlGate extends InstanceFactory {
 
   /** See {@link #AbstractTtlGate(String name, byte pins, byte[] outputPorts, byte[] notUsedPins, byte[] inoutPorts,
    * String[] ttlPortNames, boolean drawGates, int height, HdlGeneratorFactory generator)} for parameter info. */
+  protected AbstractTtlGate(
+      String name,
+      byte pins,
+      byte[] outputPorts,
+      String[] ttlPortNames,
+      boolean drawGates,
+      HdlGeneratorFactory generator) {
+    this(name, pins, outputPorts, null, null, ttlPortNames, drawGates, DEFAULT_HEIGHT, generator);
+  }
+
+  /** See {@link #AbstractTtlGate(String name, byte pins, byte[] outputPorts, byte[] notUsedPins, byte[] inoutPorts,
+   * String[] ttlPortNames, boolean drawGates, int height, HdlGeneratorFactory generator)} for parameter info. */
   protected AbstractTtlGate(String name, byte pins, byte[] outputPorts, String[] ttlPortNames,
       HdlGeneratorFactory generator) {
     this(name, pins, outputPorts, null, null, ttlPortNames, false, DEFAULT_HEIGHT, generator);
@@ -430,13 +442,88 @@ public abstract class AbstractTtlGate extends InstanceFactory {
       final var packageWidth = dir == Direction.NORTH || dir == Direction.SOUTH ? height : width;
       final var packageHeight = dir == Direction.NORTH || dir == Direction.SOUTH ? width : height;
       if (dir == Direction.SOUTH)
-        drawPowerPinLabels(g, xp, yp, packageWidth, packageHeight, 4, 8, 0, -4);
+        drawPackagePinLabels(g, xp, yp, packageWidth, packageHeight, 4, 8, 0, -4);
       else if (dir == Direction.WEST)
-        drawPowerPinLabels(g, xp, yp, packageWidth, packageHeight, 6, 8, 0, 0);
+        drawPackagePinLabels(g, xp, yp, packageWidth, packageHeight, 6, 8, 0, 0);
       else if (dir == Direction.NORTH)
-        drawPowerPinLabels(g, xp, yp, packageWidth, packageHeight, 4, 8, 4, 0);
-      else drawPowerPinLabels(g, xp, yp, packageWidth, packageHeight, 4, 10, 0, 0);
+        drawPackagePinLabels(g, xp, yp, packageWidth, packageHeight, 4, 8, 4, 0);
+      else drawPackagePinLabels(g, xp, yp, packageWidth, packageHeight, 4, 10, 0, 0);
     } else paintInternalBase(painter);
+  }
+
+  private void drawPackagePinLabels(
+      Graphics2D g,
+      int x,
+      int y,
+      int width,
+      int height,
+      int upperOffset,
+      int lowerInset,
+      int upperXOffset,
+      int lowerXOffset) {
+    drawPowerPinLabels(
+        g, x, y, width, height, upperOffset, lowerInset, upperXOffset, lowerXOffset);
+    if (!shouldDrawPinNames()) return;
+
+    var portIndex = 0;
+    for (byte pin = 1; pin <= pinNumber; pin++) {
+      if (pin == gndPin || pin == vccPin) continue;
+      final String label;
+      if (unusedPins.contains(pin)) {
+        label = getUnusedPackagePinName(pin);
+      } else {
+        label = portNames == null || portIndex >= portNames.length
+            ? null
+            : getPackagePinName(portIndex);
+        portIndex++;
+      }
+      if (label != null) {
+        drawPinLabel(
+            g,
+            label,
+            pin,
+            x,
+            y,
+            width,
+            height,
+            upperOffset,
+            lowerInset,
+            0,
+            0);
+      }
+    }
+  }
+
+  protected boolean shouldDrawPinNames() {
+    return true;
+  }
+
+  protected String getPackagePinName(int portIndex) {
+    final var name = portNames[portIndex];
+    if (name == null) return null;
+    final var separator = name.indexOf(' ');
+    return separator < 0 ? name : name.substring(0, separator);
+  }
+
+  protected String getUnusedPackagePinName(byte physicalPin) {
+    return "NC";
+  }
+
+  boolean hasCompletePackagePinNames() {
+    if (!shouldDrawPinNames()
+        || portNames == null
+        || portNames.length != pinNumber - 2 - unusedPins.size()) {
+      return false;
+    }
+    for (var i = 0; i < portNames.length; i++) {
+      final var label = getPackagePinName(i);
+      if (label == null || label.isBlank()) return false;
+    }
+    for (final var pin : unusedPins) {
+      final var label = getUnusedPackagePinName(pin);
+      if (label == null || label.isBlank()) return false;
+    }
+    return true;
   }
 
   private void drawPowerPinLabels(
@@ -449,13 +536,13 @@ public abstract class AbstractTtlGate extends InstanceFactory {
       int lowerInset,
       int upperXOffset,
       int lowerXOffset) {
-    drawPowerPinLabel(
+    drawPinLabel(
         g, "Vcc", vccPin, x, y, width, height, upperOffset, lowerInset, upperXOffset, lowerXOffset);
-    drawPowerPinLabel(
+    drawPinLabel(
         g, "GND", gndPin, x, y, width, height, upperOffset, lowerInset, upperXOffset, lowerXOffset);
   }
 
-  private void drawPowerPinLabel(
+  private void drawPinLabel(
       Graphics2D g,
       String label,
       byte pin,
@@ -470,11 +557,18 @@ public abstract class AbstractTtlGate extends InstanceFactory {
     final var isLowerPin = pin <= pinNumber / 2;
     final var pinX =
         isLowerPin ? x + (pin - 1) * 20 + 10 : x + (pinNumber - pin) * 20 + 10;
+    final var oldFont = g.getFont();
+    final var labelWidth = g.getFontMetrics().stringWidth(label);
+    if (labelWidth > 18) {
+      final var fittedSize = Math.max(4.0f, oldFont.getSize2D() * 18.0f / labelWidth);
+      g.setFont(oldFont.deriveFont(fittedSize));
+    }
     GraphicsUtil.drawCenteredText(
         g,
         label,
         pinX + (isLowerPin ? lowerXOffset : upperXOffset),
         isLowerPin ? y + height - PIN_HEIGHT - lowerInset : y + PIN_HEIGHT + upperOffset);
+    g.setFont(oldFont);
   }
 
   /**

@@ -93,6 +93,9 @@ public class Ttl74123 extends AbstractTtlGate implements TickAware {
     "2Q\\ (active low)",
     "1Q"
   };
+  private static final String[] PACKAGE_PIN_NAMES = {
+    "1A", "1B", "1RD", "1nQ", "2Q", "2A", "2B", "2RD", "2nQ", "1Q"
+  };
   private static final int[] A_PORTS = {PORT_INDEX_1A, PORT_INDEX_2A};
   private static final int[] B_PORTS = {PORT_INDEX_1B, PORT_INDEX_2B};
   private static final int[] RD_PORTS = {PORT_INDEX_1RD, PORT_INDEX_2RD};
@@ -123,6 +126,22 @@ public class Ttl74123 extends AbstractTtlGate implements TickAware {
           DEFAULT_REXT_KOHM,
           DEFAULT_CEXT_PF
         });
+  }
+
+  @Override
+  protected String getPackagePinName(int portIndex) {
+    return PACKAGE_PIN_NAMES[portIndex];
+  }
+
+  @Override
+  protected String getUnusedPackagePinName(byte physicalPin) {
+    return switch (physicalPin) {
+      case 6 -> "2C";
+      case 7 -> "2RC";
+      case 14 -> "1C";
+      case 15 -> "1RC";
+      default -> super.getUnusedPackagePinName(physicalPin);
+    };
   }
 
   /**

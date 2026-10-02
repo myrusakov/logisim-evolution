@@ -40,11 +40,23 @@ public class Ttl7404 extends AbstractTtlGate {
   private static final byte[] outPorts = {2, 4, 6, 8, 10, 12};
 
   public Ttl7404() {
-    super(_ID, portCount, outPorts, true, new NotGateHdlGeneratorFactory());
+    super(
+        _ID,
+        portCount,
+        outPorts,
+        TtlPinNames.HEX_SINGLE_INPUT,
+        true,
+        new NotGateHdlGeneratorFactory());
   }
 
   public Ttl7404(String name) {
-    super(name, portCount, outPorts, true, new NotGateHdlGeneratorFactory());
+    super(
+        name,
+        portCount,
+        outPorts,
+        TtlPinNames.HEX_SINGLE_INPUT,
+        true,
+        new NotGateHdlGeneratorFactory());
   }
 
   @Override

@@ -43,6 +43,10 @@ public class Ttl74164 extends AbstractTtlGate {
   public static final int PORT_INDEX_QG = 10;
   public static final int PORT_INDEX_QH = 11;
 
+  private static final String[] PACKAGE_PIN_NAMES = {
+    "A", "B", "QA", "QB", "QC", "QD", "CLK", "CLR", "QE", "QF", "QG", "QH"
+  };
+
 
 
 
@@ -67,6 +71,11 @@ public class Ttl74164 extends AbstractTtlGate {
         },
         null);
     super.setInstancePoker(Poker.class);
+  }
+
+  @Override
+  protected String getPackagePinName(int portIndex) {
+    return PACKAGE_PIN_NAMES[portIndex];
   }
 
   public static class Poker extends InstancePoker {

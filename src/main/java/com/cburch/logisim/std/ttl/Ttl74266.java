@@ -27,7 +27,13 @@ public class Ttl74266 extends AbstractTtlGate {
   public static final String _ID = "74266";
 
   public Ttl74266() {
-    super(_ID, (byte) 14, new byte[] {3, 6, 8, 11}, true, null);
+    super(
+        _ID,
+        (byte) 14,
+        new byte[] {3, 6, 8, 11},
+        TtlPinNames.QUAD_2_INPUT,
+        true,
+        null);
   }
 
   @Override

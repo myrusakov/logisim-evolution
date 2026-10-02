@@ -96,6 +96,15 @@ public class Ttl744060 extends AbstractTtlGate {
   }
 
   @Override
+  protected String getUnusedPackagePinName(byte physicalPin) {
+    return switch (physicalPin) {
+      case 9 -> "CTC";
+      case 10 -> "RTC";
+      default -> super.getUnusedPackagePinName(physicalPin);
+    };
+  }
+
+  @Override
   public void paintInternal(InstancePainter painter, int x, int y, int height, boolean up) {
     final var gfx = (Graphics2D) painter.getGraphics();
     super.paintBase(painter, false, false);

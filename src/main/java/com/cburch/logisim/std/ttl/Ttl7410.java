@@ -30,16 +30,26 @@ public class Ttl7410 extends AbstractTtlGate {
   private static final byte[] outPorts = {6, 8, 12};
 
   public Ttl7410() {
-    super(_ID, pinCount, outPorts, new Ttl7410HdlGenerator(true, true));
+    super(_ID, pinCount, outPorts, TtlPinNames.TRIPLE_3_INPUT, new Ttl7410HdlGenerator(true, true));
   }
 
   public Ttl7410(String val, boolean inverted) {
-    super(val, pinCount, outPorts, new Ttl7410HdlGenerator(inverted, true));
+    super(
+        val,
+        pinCount,
+        outPorts,
+        TtlPinNames.TRIPLE_3_INPUT,
+        new Ttl7410HdlGenerator(inverted, true));
     this.inverted = inverted;
   }
 
   public Ttl7410(String val, boolean inverted, boolean isOR) {
-    super(val, pinCount, outPorts, new Ttl7410HdlGenerator(inverted, !isOR));
+    super(
+        val,
+        pinCount,
+        outPorts,
+        TtlPinNames.TRIPLE_3_INPUT,
+        new Ttl7410HdlGenerator(inverted, !isOR));
     this.inverted = inverted;
     isAND = !isOR;
   }

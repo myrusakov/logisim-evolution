@@ -63,6 +63,9 @@ public class Ttl74161 extends AbstractTtlGate {
     "A0/QA",
     "TC/RC0 (Terminal Count)"
   };
+  private static final String[] PACKAGE_PIN_NAMES = {
+    "nClr", "Clk", "A", "B", "C", "D", "EnP", "nLD", "EnT", "Qd", "Qc", "Qb", "Qa", "RC0"
+  };
   private static final byte[] OUTPUT_PORTS = {11, 12, 13, 14, 15};
 
   public Ttl74161() {
@@ -73,6 +76,11 @@ public class Ttl74161 extends AbstractTtlGate {
   public Ttl74161(String name) {
     super(name, (byte) 16, OUTPUT_PORTS, PORT_NAMES, null);
     super.setInstancePoker(Poker.class);
+  }
+
+  @Override
+  protected String getPackagePinName(int portIndex) {
+    return PACKAGE_PIN_NAMES[portIndex];
   }
 
   public static class Poker extends InstancePoker {
@@ -131,9 +139,7 @@ public class Ttl74161 extends AbstractTtlGate {
         x,
         y,
         height,
-        new String[] {
-          "nClr", "Clk", "A", "B", "C", "D", "EnP", "nLD", "EnT", "Qd", "Qc", "Qb", "Qa", "RC0"
-        });
+        PACKAGE_PIN_NAMES);
     TtlRegisterData data = (TtlRegisterData) painter.getData();
     drawState(gfx, x, y, height, data);
   }

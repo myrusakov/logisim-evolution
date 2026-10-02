@@ -32,7 +32,13 @@ public class Ttl7486 extends AbstractTtlGate {
   }
 
   public Ttl7486() {
-    super(_ID, (byte) 14, new byte[] {3, 6, 8, 11}, true, new XorGateHdlGeneratorFactory());
+    super(
+        _ID,
+        (byte) 14,
+        new byte[] {3, 6, 8, 11},
+        TtlPinNames.QUAD_2_INPUT,
+        true,
+        new XorGateHdlGeneratorFactory());
   }
 
   @Override

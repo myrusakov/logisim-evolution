@@ -67,6 +67,11 @@ public class Ttl74157 extends AbstractTtlGate {
     "3Y", "3B", "3A", "4Y", "4B", "4A", "nSTROBE (active LOW)"
   };
 
+  private static final String[] PACKAGE_PIN_NAMES = {
+    "SEL", "1A", "1B", "1Y", "2A", "2B", "2Y",
+    "3Y", "3B", "3A", "4Y", "4B", "4A", "nSTR"
+  };
+
   private static final byte pinCount = 16;
   private static final byte[] outPins = {L1_Y, L2_Y, L3_Y, L4_Y};
 
@@ -78,6 +83,11 @@ public class Ttl74157 extends AbstractTtlGate {
   public Ttl74157(String icName, boolean invertOutput) {
     super(icName, pinCount, outPins, pinNames, null);
     this.invertOutput = invertOutput;
+  }
+
+  @Override
+  protected String getPackagePinName(int portIndex) {
+    return PACKAGE_PIN_NAMES[portIndex];
   }
 
   @Override

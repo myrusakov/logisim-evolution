@@ -32,7 +32,13 @@ public class Ttl7432 extends AbstractTtlGate {
   }
 
   public Ttl7432() {
-    super(_ID, (byte) 14, new byte[] {3, 6, 8, 11}, true, new OrGateHdlGeneratorFactory());
+    super(
+        _ID,
+        (byte) 14,
+        new byte[] {3, 6, 8, 11},
+        TtlPinNames.QUAD_2_INPUT,
+        true,
+        new OrGateHdlGeneratorFactory());
   }
 
   @Override

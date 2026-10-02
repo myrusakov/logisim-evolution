@@ -34,11 +34,23 @@ public class Ttl7402 extends AbstractTtlGate {
   private static final byte[] outPorts = {1, 4, 10, 13};
 
   public Ttl7402() {
-    super(_ID, portCount, outPorts, true, new NorGateHdlGeneratorFactory());
+    super(
+        _ID,
+        portCount,
+        outPorts,
+        TtlPinNames.QUAD_2_INPUT_7402,
+        true,
+        new NorGateHdlGeneratorFactory());
   }
 
   public Ttl7402(String name) {
-    super(name, portCount, outPorts, true, new NorGateHdlGeneratorFactory());
+    super(
+        name,
+        portCount,
+        outPorts,
+        TtlPinNames.QUAD_2_INPUT_7402,
+        true,
+        new NorGateHdlGeneratorFactory());
   }
 
   @Override

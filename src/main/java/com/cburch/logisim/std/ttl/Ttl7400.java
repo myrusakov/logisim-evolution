@@ -35,11 +35,23 @@ public class Ttl7400 extends AbstractTtlGate {
   private static final byte[] outPins = {3, 6, 8, 11};
 
   public Ttl7400() {
-    super(_ID, pinCount, outPins, true, new NandGateHdlGeneratorFactory());
+    super(
+        _ID,
+        pinCount,
+        outPins,
+        TtlPinNames.QUAD_2_INPUT,
+        true,
+        new NandGateHdlGeneratorFactory());
   }
 
   public Ttl7400(String name) {
-    super(name, pinCount, outPins, true, new NandGateHdlGeneratorFactory());
+    super(
+        name,
+        pinCount,
+        outPins,
+        TtlPinNames.QUAD_2_INPUT,
+        true,
+        new NandGateHdlGeneratorFactory());
   }
 
   @Override

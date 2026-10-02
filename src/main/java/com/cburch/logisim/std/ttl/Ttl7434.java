@@ -49,11 +49,23 @@ public class Ttl7434 extends AbstractTtlGate {
   private static final byte[] outPins = {2, 4, 6, 8, 10, 12};
 
   public Ttl7434() {
-    super(_ID, pinCount, outPins, true, new BufferGateHdlGeneratorFactory());
+    super(
+        _ID,
+        pinCount,
+        outPins,
+        TtlPinNames.HEX_SINGLE_INPUT,
+        true,
+        new BufferGateHdlGeneratorFactory());
   }
 
   public Ttl7434(String name) {
-    super(name, pinCount, outPins, true, new BufferGateHdlGeneratorFactory());
+    super(
+        name,
+        pinCount,
+        outPins,
+        TtlPinNames.HEX_SINGLE_INPUT,
+        true,
+        new BufferGateHdlGeneratorFactory());
   }
 
   @Override

@@ -34,6 +34,10 @@ public class Ttl74166 extends AbstractTtlGate {
    */
   public static final String _ID = "74166";
 
+  private static final String[] PACKAGE_PIN_NAMES = {
+    "SER", "P0", "P1", "P2", "P3", "CkIh", "CK", "nCLR", "P4", "P5", "P6", "Q7", "P7", "ShLd"
+  };
+
   public Ttl74166() {
     super(
         _ID,
@@ -57,6 +61,11 @@ public class Ttl74166 extends AbstractTtlGate {
         },
         null);
     super.setInstancePoker(Poker.class);
+  }
+
+  @Override
+  protected String getPackagePinName(int portIndex) {
+    return PACKAGE_PIN_NAMES[portIndex];
   }
 
   public static class Poker extends InstancePoker {
@@ -130,9 +139,7 @@ public class Ttl74166 extends AbstractTtlGate {
         x,
         y,
         height,
-        new String[] {
-          "SER", "P0", "P1", "P2", "P3", "CkIh", "CK", "nCLR", "P4", "P5", "P6", "Q7", "P7", "ShLd"
-        });
+        PACKAGE_PIN_NAMES);
     ShiftRegisterData data = getData(painter);
     drawState(g, x, y, height, data);
   }
